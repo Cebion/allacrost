@@ -28,7 +28,7 @@ endif()
 message(STATUS "Allacrost build type: ${CMAKE_BUILD_TYPE}")
 
 ##### Build options that can be set
-option(EDITOR "Build the map editor in addition to the game" ON)
+option(EDITOR "Build the map editor in addition to the game" OFF)
 option(USEPCH "Using precompiled header for compilation for GCC" ON)
 
 ##### Set the release version number for the project. Change this before every official release.
@@ -96,6 +96,8 @@ endif()
 ##### Path to where the custom Cmake modules are located
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build/cmake/modules)
 message(STATUS "Searching for library dependencies...")
+INCLUDE(FindPkgConfig)
+
 
 find_package(Boost 1.46.1 REQUIRED)
 find_package(Gettext REQUIRED)
@@ -104,9 +106,9 @@ find_package(Lua51 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(PNG REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-find_package(VorbisFile REQUIRED)
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+pkg_search_module(VORBISFILE REQUIRED vorbisfile)
 
 # The FindBoost module already prints the boost version found
 message(STATUS "gettext version ${GETTEXT_VERSION_STRING} - found at ${GETTEXT_MSGFMT_EXECUTABLE}")
@@ -673,9 +675,9 @@ target_include_directories(allacrost PUBLIC
 	${OPENAL_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIR}
 	${PNG_INCLUDE_DIR}
-	${SDL2_INCLUDE_DIR}
-	${SDL2_TTF_INCLUDE_DIR}
-	${VORBISFILE_INCLUDE_DIR}
+	${SDL2_INCLUDE_DIRS}
+	${SDL2TTF_INCLUDE_DIRS}
+	${VORBISFILE_INCLUDE_DIRS}
 )
 # Note: some library variables linked to below will be undefined if not needed for the system that the build is running on
 target_link_libraries(allacrost
@@ -688,8 +690,8 @@ target_link_libraries(allacrost
 	${OPENAL_LIBRARY}
 	${OPENGL_LIBRARIES}
 	${PNG_LIBRARIES}
-	${SDL2_LIBRARY}
-	${SDL2_TTF_LIBRARY}
+	${SDL2_LIBRARIES}
+	${SDL2TTF_LIBRARIES}
 	${VORBISFILE_LIBRARIES}
 	${X11_LIBRARIES}
 )
@@ -726,9 +728,9 @@ if(EDITOR)
 		${OPENAL_LIBRARY}
 		${OPENGL_LIBRARIES}
 		${PNG_LIBRARIES}
-		${SDL2_LIBRARY}
-		${SDL2_TTF_LIBRARY}
-		${VORBISFILE_LIBRARIES}
+		${SDL2_LIBRARIES}
+		${SDL2_TTF_LIBRARIES}
+		${VORBIS_LIBRARIES}
 		${X11_LIBRARIES}
 	)
 	qt5_use_modules(allacrost-editor Core Gui OpenGL)
