@@ -714,7 +714,7 @@ if(EDITOR)
 		${OPENGL_INCLUDE_DIR}
 		${PNG_INCLUDE_DIR}
 		${SDL2_INCLUDE_DIR}
-		${SDL2_TTF_INCLUDE_DIR}
+		${SDL2TTF_INCLUDE_DIR}
 		${VORBISFILE_INCLUDE_DIR}
 	)
 	# Note: some library variables linked to below will be undefined if not needed for the system that the build is running on
@@ -729,8 +729,8 @@ if(EDITOR)
 		${OPENGL_LIBRARIES}
 		${PNG_LIBRARIES}
 		${SDL2_LIBRARIES}
-		${SDL2_TTF_LIBRARIES}
-		${VORBIS_LIBRARIES}
+		${SDL2TTF_LIBRARIES}
+		${VORBISFILE_LIBRARIES}
 		${X11_LIBRARIES}
 	)
 	qt5_use_modules(allacrost-editor Core Gui OpenGL)
